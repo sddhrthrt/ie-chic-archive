@@ -8,6 +8,7 @@
 
 
       <textarea type=text size=30 name=text class=span10 rows=10 placeholder=Content></textarea>
+      <input type=text size=30 name=tags class=span10 placeholder="Tags separated by commas"> </textarea>
 
     <br><button type="submit" class="btn">Share</button>  
     </form>
@@ -15,10 +16,17 @@
   
   {% if entries %}
   {% for entry in entries %}
-  <div class="blog-unit">
-      <h2>{{ entry.title }}</h2>
+  <div class="blog-unit" >
+	  <div data-toggle="collapse" data-target="#{{ entry.title }}" >
+      <h2>{{ entry.title }}</h2></div>
+      <div id="{{ entry.title }}" class="collapse in" style= height:0px>
       <p>{{ entry.text|safe }}</p>
-		
+	 
+	  <br>
+	  {% for tag in entry.tags %}
+	    <span class="tag-unit">{{ tag }}</span>
+   	  {% endfor %}	
+   	  </div>
   </div>
   {% endfor %} 
   {% else %}
@@ -27,6 +35,7 @@
       <p>The database is empty!</p>
 		
   </div>
+ 
   {% endif %}
   
 {% endblock %}

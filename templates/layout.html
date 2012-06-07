@@ -39,7 +39,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <a class="brand" href="#">My Blog</a>
+          <a class="brand" href="#">Toddler's Playground</a>
           <div class="nav-collapse">
             <ul class="nav">
              <li class="active"><a href="#">Home</a></li>
@@ -65,8 +65,9 @@
       </div>
      
 
-     
+    <div id="blog-container">
 	{% block body %} {% endblock %}
+	</div>
     </div> <!-- /container -->
 
 
@@ -86,6 +87,7 @@
     <script src="{{ url_for( 'static', filename='assets/js/bootstrap-collapse.js') }}"></script>
     <script src="{{ url_for( 'static', filename='assets/js/bootstrap-carousel.js') }}"></script>
     <script src="{{ url_for( 'static', filename='assets/js/bootstrap-typeahead.js') }}"></script>
-
+	
+	
   </body>
 </html>

@@ -5021,7 +5021,15 @@ background-repeat: no-repeat;
   color: #cdcdcd;
 }
 
+.tag-unit {
+	padding: 5px;
 
+  
+  background-color: #575757;
+  -webkit-border-radius: 2px;
+     -moz-border-radius: 2px;
+          border-radius: 2px;
+}
 .pull-right {
   float: right;
 }
