@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+{% block login %}
+
+ 
+  <form action="{{ url_for('login') }}" method=post class="well form-inline">
+		<input type="text" class="input-small" placeholder="Email" name="Email">
+		<input type="password" class="input-small" placeholder="Password" name="Password">
+		<button type="submit" class="btn" >Sign in</button>
+		 {% if error %}<span class=alert-error><strong>Error:</strong> {{ error }}{% endif %}</span>
+  </form>
+{% endblock %}

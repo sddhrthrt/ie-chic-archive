@@ -1,0 +1,46 @@
+Downloading/unpacking Flask
+  Getting page http://pypi.python.org/simple/Flask
+  Could not fetch URL http://pypi.python.org/simple/Flask: <urlopen error [Errno -2] Name or service not known>
+  Will skip URL http://pypi.python.org/simple/Flask when looking for download links for Flask
+  Getting page http://pypi.python.org/simple/
+  Could not fetch URL http://pypi.python.org/simple/: <urlopen error [Errno -2] Name or service not known>
+  Will skip URL http://pypi.python.org/simple/ when looking for download links for Flask
+  Cannot fetch index base URL http://pypi.python.org/simple/
+Cannot find requirement Flask, nor fetch index URL http://pypi.python.org/simple/
+Exception information:
+Traceback (most recent call last):
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 252, in main
+    self.run(options, args)
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 408, in run
+    requirement_set.install_files(finder, force_root_egg_info=self.bundle)
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 1750, in install_files
+    url = finder.find_requirement(req_to_install, upgrade=self.upgrade)
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 996, in find_requirement
+    url_name = self._find_url_name(Link(self.index_urls[0]), url_name, req)
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 1073, in _find_url_name
+    raise DistributionNotFound('Cannot find requirement %s, nor fetch index URL %s' % (req, index_url))
+DistributionNotFound: Cannot find requirement Flask, nor fetch index URL http://pypi.python.org/simple/
+------------------------------------------------------------
+/usr/bin/pip run on Thu Jun  7 11:04:42 2012
+Downloading/unpacking Flask
+  Getting page http://pypi.python.org/simple/Flask
+  Could not fetch URL http://pypi.python.org/simple/Flask: <urlopen error [Errno -2] Name or service not known>
+  Will skip URL http://pypi.python.org/simple/Flask when looking for download links for Flask
+  Getting page http://pypi.python.org/simple/
+  Could not fetch URL http://pypi.python.org/simple/: <urlopen error [Errno -2] Name or service not known>
+  Will skip URL http://pypi.python.org/simple/ when looking for download links for Flask
+  Cannot fetch index base URL http://pypi.python.org/simple/
+Cannot find requirement Flask, nor fetch index URL http://pypi.python.org/simple/
+Exception information:
+Traceback (most recent call last):
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 252, in main
+    self.run(options, args)
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 408, in run
+    requirement_set.install_files(finder, force_root_egg_info=self.bundle)
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 1750, in install_files
+    url = finder.find_requirement(req_to_install, upgrade=self.upgrade)
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 996, in find_requirement
+    url_name = self._find_url_name(Link(self.index_urls[0]), url_name, req)
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 1073, in _find_url_name
+    raise DistributionNotFound('Cannot find requirement %s, nor fetch index URL %s' % (req, index_url))
+DistributionNotFound: Cannot find requirement Flask, nor fetch index URL http://pypi.python.org/simple/
