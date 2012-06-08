@@ -3,12 +3,12 @@
 {% block body %}
   {% if session.logged_in %}
     <form action="{{ url_for('add_entry') }}" method=post class=well>
- 
-       <input type=text size=30 name=title class=span10 placeholder=Title>
-
-
-      <textarea type=text size=30 name=text class=span10 rows=10 placeholder=Content></textarea>
-      <input type=text size=30 name=tags class=span10 placeholder="Tags separated by commas"> </textarea>
+    <h3> The Quote:</h3>
+       <input type=text size=30 name=quote class=span11 placeholder=Quote><br>
+	<h3 >Who said it?</h3>
+      <input type=text size=30 name=author class=span3 placeholder="WhoSaddit?"></textarea>
+      <h3> Tag some words.</h3>
+      <input type=text size=30 name=tags class=span4 placeholder="Tags separated by commas"> </textarea>
 
     <br><button type="submit" class="btn">Share</button>  
     </form>
@@ -17,10 +17,12 @@
   {% if entries %}
   {% for entry in entries %}
   <div class="blog-unit" >
-	  <div data-toggle="collapse" data-target="#{{ entry.title }}" >
-      <h2>{{ entry.title }}</h2></div>
-      <div id="{{ entry.title }}" class="collapse in" style= height:0px>
-      <p>{{ entry.text|safe }}</p>
+	  <div data-toggle="collapse" data-target="#{{ entry.id }}" >
+      <h3> "{{ entry.quote }}"<h3></div>
+	 
+
+      <div id="{{ entry.id }}" >
+      <p class=pull-right>-- {{ entry.author }}</p>
 	 
 	  <br>
 	  {% for tag in entry.tags %}
