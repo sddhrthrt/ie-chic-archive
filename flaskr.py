@@ -56,21 +56,35 @@ def teardown_request(exception):
 
 @app.route('/')
 def show_entries():
+    cur = g.db.execute('select tags from entries order by id desc')
+    taglist=[]
+    for row in cur:
+    	for tag in row[0].split(','):
+			print tag
+			if tag not in taglist:
+				taglist+=[tag]
+	print taglist
     cur = g.db.execute('select id, quote, author, tags, sender from entries order by id desc')
-    entries = [dict(id=row[0], quote=row[1], author=row[2], tags=row[3].split(','), sender=row[4]) for row in cur.fetchall()]
+    entries = [dict(id=row[0], quote=row[1], author=row[2], tags=row[3].split(','), sender=row[4], alltags=taglist) for row in cur.fetchall()]
     return render_template('show_entries.html', entries=entries)
 
 def getQuotes(tag):
 	cur = g.db.execute('select id, quote, author, tags, sender from entries order by id desc')
-	entries = [dict(id=row[0], quote=row[1], author=row[2], tags=row[3].split(','), sender=row[4]) for row in cur.fetchall() if not row.find(tag)==-1]
-	return entries
+	entries = [dict(id=row[0], quote=row[1], author=row[2], tags=row[3].split(','), sender=row[4]) for row in cur.fetchall() if not row[3].find(tag)==-1]
 
 @app.route('/add', methods=['GET', 'POST'])
 def add_entry():
-    global USERNAME 
-#    if not session.get('logged_in'):
-#        abort(401)
-    g.db.execute('insert into entries (quote, author, tags, sender) values (?, ?, ?, ?)',
+	
+    if not session.get('logged_in'):
+        abort(401)
+    if(len(request.form['quote'])==0):
+    	flash("Entry failed")
+	return redirect(url_for('show_entries'))
+    if(len(request.form['author'])==0):
+	    g.db.execute('insert into entries (quote, author, tags, sender) values (?, ?, ?, ?)',
+                 [request.form['quote'], "Anon.", request.form['tags'], USERNAME])
+    else:
+	    g.db.execute('insert into entries (quote, author, tags, sender) values (?, ?, ?, ?)',
                  [request.form['quote'], request.form['author'], request.form['tags'], USERNAME])
     g.db.commit()
     flash('New entry was successfully posted')

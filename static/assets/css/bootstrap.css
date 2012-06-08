@@ -5030,7 +5030,26 @@ background-repeat: no-repeat;
 }
 
 .tag-unit {
-	padding: 5px;
+	padding: 2px;
+
+  
+  background-color: #575757;
+  -webkit-border-radius: 2px;
+     -moz-border-radius: 2px;
+          border-radius: 2px;
+}
+
+.tag-container {
+	padding: 30px;
+  margin-bottom: 30px;
+  
+  background-color: #cdcdcd;
+  -webkit-border-radius: 6px;
+     -moz-border-radius: 6px;
+          border-radius: 6px;
+}
+.tag-container-unit {
+	padding: 2px;
 
   
   background-color: #575757;

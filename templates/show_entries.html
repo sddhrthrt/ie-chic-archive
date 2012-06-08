@@ -3,7 +3,9 @@
 {% block body %}
   {% if session.logged_in %}
     <form action="{{ url_for('add_entry') }}" method=post class=well>
-    <h3> The Quote:</h3>
+    <div data-toggle="collapse" data-target="#form">
+    <h3> Add a quote:</h3></div>
+    <div id="form" class="collapse in">
        <input type=text size=30 name=quote class=span11 placeholder=Quote><br>
 	<h3 >Who said it?</h3>
       <input type=text size=30 name=author class=span3 placeholder="WhoSaddit?"></textarea>
@@ -12,7 +14,9 @@
 
     <br><button type="submit" class="btn">Share</button>  
     </form>
+    </div>
   {% endif %}
+
   
   {% if entries %}
   {% for entry in entries %}

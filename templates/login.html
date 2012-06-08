@@ -1,12 +1,7 @@
-{% extends "layout.html" %}
-{% block login %}
-
- 
-  <form action="{{ url_for('login') }}" method=post class="well form-inline">
-		<input type="text" class="input-small" placeholder="Email" name="Email">
-		<input type="password" class="input-small" placeholder="Password" name="Password">
-		<button type="submit" class="btn" >Sign in</button>
+  <form action="{{ url_for('login') }}" method=post >
+  <div class="input-append">
+		<input type="text" class="span2"  placeholder="Email" name="Email">
+		<input type="password" class="span2" placeholder="Password" name="Password">
+		<button type="submit" class="btn span2" style="display:none" >Sign in</button></div>
 		 {% if error %}<span class=alert-error><strong>Error:</strong> {{ error }}{% endif %}</span>
   </form>
-{% endblock %}
-
