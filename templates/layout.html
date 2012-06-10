@@ -3,19 +3,16 @@
 {% include "navbar.html" %}
     <div class="container">
       {% include "title.html" %}     
-      <div class="tag-container">
-      {% import "show_entries.html" as sho_entries %}
-	{% for tag in sho_entries.entries['alltags'] %}
-	{{ tag }}
-		<span class="tag-container-unit">{{ tag }}</span>
-	{% endfor %}
-      </div>
     <div id="blog-container">
-	{% block body %} {% endblock %}
+	{% block body %}
+	{% include "tags.html" %}
+   	{% include "show_entries.html" %}
+	{% endblock %}
 	</div>
 
     </div>
 
+{% include "navbar_bottom.html" %}
 {% include "jsinclude.html" %}	
 	
   </body>

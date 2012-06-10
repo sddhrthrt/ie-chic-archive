@@ -16,7 +16,7 @@ from flask import Flask, request, session, g, redirect, url_for, abort, \
      render_template, flash
 
 # configuration
-DATABASE = '/tmp/flaskr.db'
+DATABASE = '/srv/www/blogsite/flaskr.db'
 DEBUG = True
 SECRET_KEY = 'development key'
 USERNAME = 'admin'
@@ -52,10 +52,7 @@ def teardown_request(exception):
     """Closes the database again at the end of the request."""
     if hasattr(g, 'db'):
         g.db.close()
-
-
-@app.route('/')
-def show_entries():
+def getAllTags():
     cur = g.db.execute('select tags from entries order by id desc')
     taglist=[]
     for row in cur:
@@ -63,18 +60,36 @@ def show_entries():
 			print tag
 			if tag not in taglist:
 				taglist+=[tag]
-	print taglist
+    return taglist
+
+def getAllQuotes():
     cur = g.db.execute('select id, quote, author, tags, sender from entries order by id desc')
-    entries = [dict(id=row[0], quote=row[1], author=row[2], tags=row[3].split(','), sender=row[4], alltags=taglist) for row in cur.fetchall()]
-    return render_template('show_entries.html', entries=entries)
+    return [dict(id=row[0], quote=row[1], author=row[2], tags=row[3].split(','), sender=row[4]) for row in cur.fetchall()]
+
+@app.route('/')
+def show_entries():
+    q=getAllQuotes()
+    data = dict(quotes=q, tags=getAllTags(), add=False)
+    return render_template('layout.html', data=data)
 
 def getQuotes(tag):
 	cur = g.db.execute('select id, quote, author, tags, sender from entries order by id desc')
-	entries = [dict(id=row[0], quote=row[1], author=row[2], tags=row[3].split(','), sender=row[4]) for row in cur.fetchall() if not row[3].find(tag)==-1]
+	return [dict(id=row[0], quote=row[1], author=row[2], tags=row[3].split(','), sender=row[4]) for row in cur.fetchall() if not row[3].find(tag)==-1]
 
-@app.route('/add', methods=['GET', 'POST'])
+@app.route('/by-tag/<tag>')
+def show_tag_entries(tag):
+    q=getQuotes(tag)
+    data = dict(quotes=q, tags=getAllTags(), add=False)
+    return render_template('layout.html', data=data)
+
+@app.route('/add')
+def add():
+    q=getAllQuotes()
+    data = dict(quotes=q, tags=getAllTags(), add=True)
+    return render_template('layout.html', data=data)
+
+@app.route('/submit', methods=['GET', 'POST'])
 def add_entry():
-	
     if not session.get('logged_in'):
         abort(401)
     if(len(request.form['quote'])==0):

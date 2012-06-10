@@ -1,0 +1,10 @@
+   <div class="tag-container">
+   <h3> Tags: </h3>
+   
+      {% for tag in data.tags %}
+      <a href="/by-tag/{{ tag }}">
+	<span class="tag-container-unit">      {{ tag }} </span>
+	</a>
+      {% endfor %}
+      </div>
+

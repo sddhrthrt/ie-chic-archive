@@ -1,7 +1,7 @@
     <div class="navbar navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container">
-          <a class="brand" href="#">Toddler's Playground</a>
+          <a class="brand" href="/">Toddler's Playground</a>
             <ul class="nav">
              <li class="active"><a href="#">Home</a></li>
 	      <li><a href="#contact">Contact</a></li>
@@ -10,6 +10,7 @@
 		  {% if not session.logged_in %}
 		 {% include "login.html" %} 
 		  {% else %}
+			<li><a href="{{ url_for('add') }}">Add a Quote</a>
 			<li><a href="{{ url_for('logout') }}">Log Out</a>
 		  {% endif %}  
 	       </div>
