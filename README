@@ -3,15 +3,15 @@
 			made using Flask
 
 	~ Made by shamelessly stealing the framework of 
-	       Flaskr, the defualt example
-	          that ships with Flask.
-	~ also used Twitter's generous contribution - 
-		the briilliant Bootstrap.
+	  Flaskr, the defualt example
+	  that ships with Flask.
+	~ also used Twitter's briilliant Bootstrap, generously
+	  in public domain.
 
 	~ Database - Sqlite3. 
 	~ Made as my first web design venture.
 
 
 
-		Try it out :D
+	Try it out :D
 
