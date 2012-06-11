@@ -1,7 +1,6 @@
   <form action="{{ url_for('login') }}" method=post >
-  <div class="input-append">
 		<input type="text" class="span2"  placeholder="Email" name="Email">
 		<input type="password" class="span2" placeholder="Password" name="Password">
-		<button type="submit" class="btn span2" style="display:none" >Sign in</button></div>
+		<button type="submit" class="btn span1" >Sign in</button>
 		 {% if error %}<span class=alert-error><strong>Error:</strong> {{ error }}{% endif %}</span>
   </form>

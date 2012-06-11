@@ -4968,8 +4968,9 @@ background-repeat: no-repeat;
 
 .title-unit {
   padding: 30px;
+padding-bottom: 60px;
   margin-bottom: 10px;
-  background-image: url("../img/pic.png");
+  background-image: url("../img/commas.png");
   background-size: 200px 200px;
   background-repeat: no-repeat;
   background-color: #eeeeee;
@@ -4993,6 +4994,9 @@ background-repeat: no-repeat;
   font-weight: 200;
   line-height: 27px;
   color: inherit;
+}
+.footer { 
+text-align: center;
 }
 .blog-unit {
 	padding: 30px;

@@ -16,7 +16,7 @@ from flask import Flask, request, session, g, redirect, url_for, abort, \
      render_template, flash
 
 # configuration
-DATABASE = '/srv/www/blogsite/flaskr.db'
+DATABASE = '/home/rt/blogsite/flaskr.db'
 DEBUG = True
 SECRET_KEY = 'development key'
 USERNAME = 'admin'

@@ -2,9 +2,11 @@
    <h3> Tags: </h3>
    
       {% for tag in data.tags %}
+{% if tag %}	
       <a href="/by-tag/{{ tag }}">
 	<span class="tag-container-unit">      {{ tag }} </span>
-	</a>
+	</a>{% endif %}
       {% endfor %}
+<div class="pull-right">
+<input type=text class="span3" style="margin-left:5 margin-down:3 auto;" data-provide="typeahead" text="Search Tags" data-items="4" data-source="[ {% for tag in data.tags %}{% if tag %} "{{tag}}"{% endif %}{% endfor %} ]" type="text"> </div>
       </div>
-
