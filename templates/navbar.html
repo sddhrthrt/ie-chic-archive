@@ -5,14 +5,14 @@
             <ul class="nav">
              <li class="active"><a href="#">Home</a></li>
 	      <li><a href="#contact">Contact</a></li>
-	      <span class="nav pull-right">
+	      <div class="nav pull-right">
 		  {% if not session.logged_in %}
 		 {% include "login.html" %} 
 		  {% else %}
 			<li><a href="{{ url_for('add') }}">Add a Quote</a></li>
 			<li><a href="{{ url_for('logout') }}">Log Out</a></li>
 		  {% endif %}  
-	       </span>
+	       </div>
 </ul>
         </div>
       </div>

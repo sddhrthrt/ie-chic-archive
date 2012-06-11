@@ -14,9 +14,9 @@ from sqlite3 import dbapi2 as sqlite3
 from contextlib import closing
 from flask import Flask, request, session, g, redirect, url_for, abort, \
      render_template, flash
-
+from flask_login import LoginManager
 # configuration
-DATABASE = '/home/rt/blogsite/flaskr.db'
+DATABASE = '/srv/www/blogsite/flaskr.db'
 DEBUG = True
 SECRET_KEY = 'development key'
 USERNAME = 'admin'
@@ -118,7 +118,7 @@ def login():
             session['logged_in'] = True
             flash('You were logged in')
             return redirect(url_for('show_entries'))
-    return render_template('login.html', error=error)
+    return render_template('login_error.html', error=error)
 
 
 @app.route('/logout')

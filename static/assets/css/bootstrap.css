@@ -791,9 +791,10 @@ input[type="color"],
   display: inline-block;
   height: 18px;
   padding: 4px;
-  margin-bottom: 9px;
+  margin-bottom: 0px;
+  margin-top: 4px;
   font-size: 13px;
-  line-height: 18px;
+  line-height: 13px;
   color: #555555;
 }
 
