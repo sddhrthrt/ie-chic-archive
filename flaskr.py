@@ -49,7 +49,12 @@ def approve():
 		for i in range(len(lines)/4):
 			quotes+=[dict(quote=lines[i*4], author=lines[i*4+1], tags=lines[i*4+2], sender=lines[i*4+3])]
 	return render_template('approve.html', quotes=quotes)
-
+@app.route('/delete')
+def delete_pending():
+	a=[]
+	with open("data/pending.txt", "w") as f:
+		f.writelines(a)
+	redirect(url_for("show_entries"))
 @app.before_request
 def before_request():
 	"""Make sure we are connected to the database each request."""
@@ -124,7 +129,6 @@ def approved():
 		flash('New entry was successfully posted')
 	with open("data/pending.txt", "w") as f:
 		f.writelines(a)
-		print a
 		return redirect(url_for('show_entries'))
 
 
@@ -151,4 +155,5 @@ def logout():
 
 
 if __name__ == '__main__':
+	app.debug=False
 	app.run(host='0.0.0.0')

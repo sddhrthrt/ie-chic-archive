@@ -8,5 +8,5 @@
 	</a><br>{% endif %}
       {% endfor %}
       Search:
-<input type=text class="span1" style="margin-left:5 margin-down:3 auto;" data-provide="typeahead" text="Search Tags" data-items="4" data-source='[ {% for tag in data.tags %}{% if tag %} "{{tag}}",{% endif %}{% endfor %} ]' > </div>
+<input id="searchbox" type=text class="span1" style="margin-left:5 margin-down:3 auto;" data-provide="typeahead" text="Search Tags" data-items="4" data-source='[ {% for tag in data.tags %}{% if tag %} "{{tag}}",{% endif %}{% endfor %} ]' > </div>
       </div>
