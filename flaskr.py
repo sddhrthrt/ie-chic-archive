@@ -16,7 +16,7 @@ from flask import Flask, request, session, g, redirect, url_for, abort, \
      render_template, flash
 from flask_login import LoginManager
 # configuration
-DATABASE = '/home/rt/blogsite/data/flaskr.db'
+DATABASE = 'data/flaskr.db'
 DEBUG = True
 SECRET_KEY = 'browncoffeebeans'
 USERNAME = 'admin'
