@@ -1,5 +1,5 @@
   <div class="offset2">
-  {% if session.logged_in and data.add==True %}
+  {% if data.add==True %}
     <form action="{{ url_for('add_entry') }}" method=post class=well>
     <div data-toggle="collapse" data-target="#form">
     <h3> Add a quote:</h3></div>

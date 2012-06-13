@@ -16,11 +16,11 @@ from flask import Flask, request, session, g, redirect, url_for, abort, \
      render_template, flash
 from flask_login import LoginManager
 # configuration
-DATABASE = '/srv/www/blogsite/data/flaskr.db'
+DATABASE = '/home/rt/blogsite/data/flaskr.db'
 DEBUG = True
-SECRET_KEY = 'development key'
+SECRET_KEY = 'browncoffeebeans'
 USERNAME = 'admin'
-PASSWORD = 'default'
+PASSWORD = 'browncoffeefumes'
 
 # create our little application :)
 app = Flask(__name__)
@@ -104,8 +104,6 @@ def add():
 
 @app.route('/submit', methods=['POST'])
 def add_entry():
-	if not session.get('logged_in'):
-		abort(401)
 	if(len(request.form['quote'])==0):
 		flash("Entry failed")
 		return redirect(url_for('show_entries'))
