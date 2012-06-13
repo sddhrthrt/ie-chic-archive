@@ -51,6 +51,9 @@ def approve():
 	return render_template('approve.html', quotes=quotes)
 @app.route('/delete')
 def delete_pending():
+	if not session.get('logged_in'):
+		abort(401)
+
 	a=[]
 	with open("data/pending.txt", "w") as f:
 		f.writelines(a)
