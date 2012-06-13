@@ -1,0 +1,18 @@
+application: quote-unquote 
+version: 1
+runtime: python
+api_version: 1
+
+handlers:
+- url: /
+  script: flaskr.py
+
+- url: /index\.html
+  script: flaskr.py
+
+- url: /stylesheets
+  static_dir: static/assets/css 
+
+- url: /(.*\.(gif|png|jpg))
+  static_files: static/assets/\1
+  upload: static/assets/img/(.*\.(gif|png|jpg))

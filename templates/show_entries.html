@@ -1,4 +1,4 @@
-
+  <div class="offset2">
   {% if session.logged_in and data.add==True %}
     <form action="{{ url_for('add_entry') }}" method=post class=well>
     <div data-toggle="collapse" data-target="#form">
@@ -28,7 +28,8 @@
 	 
 	  <br>
 	  {% for tag in entry.tags %}
-	    <span class="tag-unit">{{ tag }}</span>
+	      <a href="/by-tag/{{ tag }}">
+	    <span class="tag-unit">{{ tag }}</span></a>
    	  {% endfor %}	
    	  </div>
   </div>
@@ -41,4 +42,4 @@
   </div>
  
  {% endif %} 
-  
+ </div>
