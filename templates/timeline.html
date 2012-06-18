@@ -1,11 +1,11 @@
 {% extends "layout.html" %}
 {% block title %}
   {% if request.endpoint == 'public_timeline' %}
-    Public Timeline
+    Public Requests
   {% elif request.endpoint == 'user_timeline' %}
-    {{ profile_user.username }}'s Timeline
+    {{ profile_user.username }}'s Requests 
   {% else %}
-    My Timeline
+    My Requests 
   {% endif %}
 {% endblock %}
 {% block body %}
@@ -27,23 +27,27 @@
       </div>
     {% elif request.endpoint == 'timeline' %}
       <div class=twitbox>
-        <h3>What's on your mind {{ g.user.username }}?</h3>
-        <form action="{{ url_for('add_message') }}" method=post>
-          <p><input type=text name=text size=60><!--
-          --><input type=submit value="Share">
+        <h3>What you think should be added to our archive, {{ g.user.username }}?</h3>
+        <form action="{{ url_for('add_request') }}" method=post>
+          <p>URL:<input type=text name="url" size=60>
+	     Script:<input type=text name="script" size=60>
+	     Description:<input type=text name="description" size=60>
+	     Frequency:<input type=text name="frequency" size=60></p>
+          <input type=submit value="Archive-it!">
         </form>
       </div>
     {% endif %}
   {% endif %}
   <ul class=messages>
-  {% for message in messages %}
+  {% for message in requests%}
     <li><img src="{{ message.email|gravatar(size=48) }}"><p>
-      <strong><a href="{{ url_for('user_timeline', username=message.username)
-      }}">{{ message.username }}</a></strong>
-      {{ message.text }}
-      <small>&mdash; {{ message.pub_date|datetimeformat }}</small>
+      <strong><a href="{{ url_for('user_timeline', username=message.request_by)
+      }}">{{ message.request_by}}</a></strong>
+      {{ message.url}}
+      {{ message.status}}
+      <small>&mdash; {{ message.queued_at|datetimeformat }}</small>
   {% else %}
-    <li><em>There's no message so far.</em>
+    <li><em>There's no requestso far.</em>
   {% endfor %}
   </ul>
 {% endblock %}

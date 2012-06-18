@@ -12,17 +12,17 @@ create table follower (
   whom_id integer
 );
 
-drop table if exists request;
-create table request (
+drop table if exists requests;
+create table requests (
   request_id integer primary key autoincrement,
   request_by integer not null,
   url string not null,
   script integer not null,
   description string,
   queued_at	string not null,
-  started_at	string not null,
-  done_at	string not null,
-  frequency	string not null,
+  started_at	string,
+  done_at	string,
+  frequency	string,
   status	string not null	
 );
 

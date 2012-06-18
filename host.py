@@ -20,7 +20,7 @@ from werkzeug import check_password_hash, generate_password_hash
 
 
 # configuration
-DATABASE = 'data/minitwit.db'
+DATABASE = 'data/archive.db'
 PER_PAGE = 30
 DEBUG = True
 SECRET_KEY = 'development key'
@@ -97,28 +97,28 @@ def timeline():
     """
     if not g.user:
         return redirect(url_for('public_timeline'))
-    return render_template('timeline.html', messages=query_db('''
-        select message.*, user.* from message, user
-        where message.author_id = user.user_id and (
+    return render_template('timeline.html', requests=query_db('''
+        select requests.*, user.* from requests, user
+        where requests.request_by = user.user_id and (
             user.user_id = ? or
             user.user_id in (select whom_id from follower
                                     where who_id = ?))
-        order by message.pub_date desc limit ?''',
+        order by requests.queued_at desc limit ?''',
         [session['user_id'], session['user_id'], PER_PAGE]))
 
 
 @app.route('/public')
 def public_timeline():
     """Displays the latest messages of all users."""
-    return render_template('timeline.html', messages=query_db('''
-        select message.*, user.*,  from message, user
-        where message.author_id = user.user_id
-        order by message.pub_date desc limit ?''', [PER_PAGE]))
+    return render_template('timeline.html', requests=query_db('''
+        select requests.*, user.*  from requests, user
+        where requests.request_by= user.user_id
+        order by requests.queued_at limit ?''', [PER_PAGE]))
 
 
 @app.route('/<username>')
 def user_timeline(username):
-    """Display's a users tweets."""
+    """Display's a users requests."""
     profile_user = query_db('select * from user where username = ?',
                             [username], one=True)
     if profile_user is None:
@@ -130,9 +130,9 @@ def user_timeline(username):
             [session['user_id'], profile_user['user_id']],
             one=True) is not None
     return render_template('timeline.html', messages=query_db('''
-            select message.*, user.* from message, user where
-            user.user_id = message.author_id and user.user_id = ?
-            order by message.pub_date desc limit ?''',
+            select requests.*, user.* from requests, user where
+            user.user_id = requests.request_by and user.user_id = ?
+            order by requests.queued_at desc limit ?''',
             [profile_user['user_id'], PER_PAGE]), followed=followed,
             profile_user=profile_user)
 
@@ -167,15 +167,15 @@ def unfollow_user(username):
     return redirect(url_for('user_timeline', username=username))
 
 
-@app.route('/add_message', methods=['POST'])
-def add_message():
-    """Registers a new message for the user."""
+@app.route('/add_request', methods=['POST'])
+def add_request():
+    """Registers a new request for the user."""
+    print request
     if 'user_id' not in session:
         abort(401)
-    if request.form['text']:
-        g.db.execute('''insert into message (request_by, url, script, description, frequency, queued_at)
-            values (?, ?, ?, ?, ?, ?, ?)''', (session['user_id'], request.form['url'], request.form['script'], request.form['description'], request.form['frequency'],
-                                  int(time.time())))
+    if request.form['url']:
+        g.db.execute('''insert into requests (request_by, url, script, description, frequency, queued_at, status)
+            values (?, ?, ?, ?, ?, ?, ?)''', (session['user_id'], request.form['url'], request.form['script'], request.form['description'], request.form['frequency'], int(time.time()),0))
         g.db.commit()
         flash('Your request was recorded')
     return redirect(url_for('timeline'))
