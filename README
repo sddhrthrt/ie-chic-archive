@@ -1,28 +1,17 @@
+                        / Archive-it! /
 
-                        / MiniTwit /
-
-           because writing todo lists is not fun
+           To archive the antiquities and goodies in the internet
 
 
-    ~ What is MiniTwit?
+    
+   -	What do we do?
+	You submit requests to archive any site/content/torrent. We will process
+	and approve your request and your request will be downloaded.
+   -	UI?
+	Made of bootstrap, flask and jinja2 templates.
+   -	Database?
+	sqlite3, comes builtin in Python and is fun to use.
+   - 	Backend?
+	Python. Simple and easy to understand.
 
-      A SQLite and Flask powered twitter clone
-
-    ~ How do I use it?
-
-      1. edit the configuration in the minitwit.py file or
-         export an MINITWIT_SETTINGS environment variable
-         pointing to a configuration file.
-
-      2. fire up a python shell and run this:
-
-         >>> from minitwit import init_db; init_db()
-
-      3. now you can run the minitwit.py file with your
-         python interpreter and the application will
-         greet you on http://localhost:5000/
-	
-    ~ Is it tested?
-
-      You betcha.  Run the `minitwit_tests.py` file to
-      see the tests pass.
+	IE, contribute to the project. Add scripts, add functionality. 
