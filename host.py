@@ -16,8 +16,8 @@ from datetime import datetime
 from contextlib import closing
 from flask import Flask, request, session, url_for, redirect, \
      render_template, abort, g, flash
+from jinja2 import Environment
 from werkzeug import check_password_hash, generate_password_hash
-
 
 # configuration
 DATABASE = 'data/archive.db'
@@ -29,7 +29,6 @@ SECRET_KEY = 'development key'
 app = Flask(__name__)
 app.config.from_object(__name__)
 app.config.from_envvar('MINITWIT_SETTINGS', silent=True)
-
 
 def connect_db():
     """Returns a new connection to the database."""
@@ -58,7 +57,17 @@ def get_user_id(username):
                        [username]).fetchone()
     return rv[0] if rv else None
 
+def get_user(user_id):
+    """Convenience method to look up the username for an id."""
+    rv = g.db.execute('select username from user where user_id = ?',
+                       [user_id]).fetchone()
+    return rv[0] if rv else None
+app.jinja_env.filters['get_user']=get_user
 
+def get_status(id):
+	statuses={'0': "Not Started", '-1': "Processed at intervals", '1': "Processing", '2': "Complete"}
+	return statuses[str(int(id))]
+app.jinja_env.filters['get_status']=get_status
 def format_datetime(timestamp):
     """Format a timestamp for display."""
     return datetime.utcfromtimestamp(timestamp).strftime('%Y-%m-%d @ %H:%M')
@@ -124,8 +133,7 @@ def user_timeline(username):
     if profile_user is None:
         abort(404)
     followed = False
-    if g.user:
-        followed = query_db('''select 1 from follower where
+    if g.user:followed = query_db('''select 1 from follower where
             follower.who_id = ? and follower.whom_id = ?''',
             [session['user_id'], profile_user['user_id']],
             one=True) is not None

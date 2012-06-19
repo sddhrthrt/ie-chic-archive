@@ -23,7 +23,7 @@ create table requests (
   started_at	string,
   done_at	string,
   frequency	string,
-  status	string not null	
+  status integer not null	
 );
 
 drop table if exists scripts;
