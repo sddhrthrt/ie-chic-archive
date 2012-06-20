@@ -1,0 +1,9 @@
+
+		<form class="well form-inline" action="{{ url_for('add_request') }}" method=post>
+						<h2>	Add:&nbsp &nbsp  </h2>
+						<input class="span4" type=text name="url" placeholder="URL"></input>
+						<input type=text class="span3" name="description"  placeholder="Small Description"></input>
+						<input type=text class="span2" name="frequency" placehoder="Frequency: 1h, 1d, 1m"></input>
+						<button class="btn" type=submit value="Archive-it!">Archive-it!</button>
+				</form>
+

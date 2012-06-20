@@ -18,6 +18,7 @@ from flask import Flask, request, session, url_for, redirect, \
      render_template, abort, g, flash
 from jinja2 import Environment
 from werkzeug import check_password_hash, generate_password_hash
+import os
 
 # configuration
 DATABASE = 'data/archive.db'
@@ -65,9 +66,11 @@ def get_user(user_id):
 app.jinja_env.filters['get_user']=get_user
 
 def get_status(id):
+	"""Parse status codes and return verbose status. Filter for Jinja2 templates."""
 	statuses={'0': "Not Started", '-1': "Processed at intervals", '1': "Processing", '2': "Complete"}
 	return statuses[str(int(id))]
 app.jinja_env.filters['get_status']=get_status
+
 def format_datetime(timestamp):
     """Format a timestamp for display."""
     return datetime.utcfromtimestamp(timestamp).strftime('%Y-%m-%d @ %H:%M')
@@ -78,6 +81,20 @@ def gravatar_url(email, size=80):
     return 'http://www.gravatar.com/avatar/%s?d=identicon&s=%d' % \
         (md5(email.strip().lower().encode('utf-8')).hexdigest(), size)
 
+def get_scripts():
+	"""Gives all available scripts so new requests can be added based on these scripts"""
+	p=os.path.abspath('scripts')
+	s=os.listdir(p)
+	default_list= ['file', 'site', 'torrent']
+	for i in default_list:
+		s.remove(i)
+	scripts=[]
+	for i in s:
+		if(i[0:2]=='r_'):
+			scripts+=[{'name': i, 'freq': True}]
+		else:
+			scripts+=[{'name': i}]
+	return scripts
 
 @app.before_request
 def before_request():
@@ -106,43 +123,45 @@ def timeline():
     """
     if not g.user:
         return redirect(url_for('public_timeline'))
-    return render_template('timeline.html', requests=query_db('''
+    return render_template('timeline.html', requests={'requests':query_db('''
         select requests.*, user.* from requests, user
         where requests.request_by = user.user_id and (
             user.user_id = ? or
             user.user_id in (select whom_id from follower
                                     where who_id = ?))
         order by requests.queued_at desc limit ?''',
-        [session['user_id'], session['user_id'], PER_PAGE]))
+        [session['user_id'], session['user_id'], PER_PAGE]), 'scripts':get_scripts()})
 
 
 @app.route('/public')
 def public_timeline():
     """Displays the latest messages of all users."""
-    return render_template('timeline.html', requests=query_db('''
+    messages=query_db('''
         select requests.*, user.*  from requests, user
         where requests.request_by= user.user_id
-        order by requests.queued_at limit ?''', [PER_PAGE]))
+        order by requests.queued_at limit ?''', [PER_PAGE])
+    return render_template('timeline.html', requests={'requests':messages})
 
 
 @app.route('/<username>')
 def user_timeline(username):
     """Display's a users requests."""
-    profile_user = query_db('select * from user where username = ?',
-                            [username], one=True)
+    profile_user = query_db('select * from user where username = ?', [username], one=True)
     if profile_user is None:
-        abort(404)
+		abort(404)
     followed = False
-    if g.user:followed = query_db('''select 1 from follower where
+    if g.user:
+			followed = query_db('''select 1 from follower where
             follower.who_id = ? and follower.whom_id = ?''',
             [session['user_id'], profile_user['user_id']],
             one=True) is not None
-    return render_template('timeline.html', messages=query_db('''
+    messages=query_db('''
             select requests.*, user.* from requests, user where
             user.user_id = requests.request_by and user.user_id = ?
             order by requests.queued_at desc limit ?''',
-            [profile_user['user_id'], PER_PAGE]), followed=followed,
-            profile_user=profile_user)
+            [profile_user['user_id'], PER_PAGE])
+    print messages
+    return render_template('timeline.html', requests={'requests':messages, 'followed':followed, 'profile_user':profile_user})
 
 
 @app.route('/<username>/follow')
@@ -174,20 +193,37 @@ def unfollow_user(username):
     flash('You are no longer following "%s"' % username)
     return redirect(url_for('user_timeline', username=username))
 
-
-@app.route('/add_request', methods=['POST'])
-def add_request():
+@app.route('/add_<script>', methods=['POST'])
+def add_request(script):
     """Registers a new request for the user."""
-    print request
     if 'user_id' not in session:
         abort(401)
     if request.form['url']:
-        g.db.execute('''insert into requests (request_by, url, script, description, frequency, queued_at, status)
-            values (?, ?, ?, ?, ?, ?, ?)''', (session['user_id'], request.form['url'], request.form['script'], request.form['description'], request.form['frequency'], int(time.time()),0))
-        g.db.commit()
-        flash('Your request was recorded')
+		if 'frequency' in request.form:
+				g.db.execute('''insert into requests (request_by, url, script, description, frequency, queued_at, status) values (?, ?, ?, ?, ?, ?, ?)''', (session['user_id'], request.form['url'], script, request.form['description'], request.form['frequency'], int(time.time()),0))
+		else:
+				g.db.execute('''insert into requests (request_by, url, script, description, frequency, queued_at, status) values (?, ?, ?, ?, ?, ?, ?)''', (session['user_id'], request.form['url'], script, request.form['description'], 0, int(time.time()),0))
+		g.db.commit()
+		flash('Your request for %s...%s was recorded'%(request.form['url'][:8], request.form['url'][-8:]))
     return redirect(url_for('timeline'))
 
+@app.route('/script_add', methods=['POST'])
+def add_script():
+	"""Registers a new script"""
+	print request.form
+	if 'user_id' not in session:
+		abort(401)
+	if request.form['code'] and request.form['name']:
+		fname=str(request.form['name'])
+		if 'repeat' in request.form:
+			fname='r_'+fname
+		fname=os.path.normpath(os.path.join(os.path.abspath('scripts'),fname))
+		with open(fname, "w") as f:
+			f.write(str(request.form['code']))
+		flash('New script %s was added!'%request['name'])
+	else:
+		flash('Script missing name or code itself!')
+	return redirect(url_for('timeline'))
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():

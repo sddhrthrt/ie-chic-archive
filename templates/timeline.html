@@ -3,68 +3,126 @@
   {% if request.endpoint == 'public_timeline' %}
     Public Requests
   {% elif request.endpoint == 'user_timeline' %}
-    {{ profile_user.username }}'s Requests 
+  {{ requests.profile_user.username }}'s Requests
   {% else %}
-    My Requests 
+  My Requests 
   {% endif %}
 {% endblock %}
 {% block body %}
-  <h2>{{ self.title() }}</h2>
+<div class="page-head">
+  {% if request.endpoint == 'public_timeline' %}
+    <h1>Public Requests<h5><br></h5></h1>
+
+  {% elif request.endpoint == 'user_timeline' %}
+   <h1> {{ requests.profile_user.username }}'s Requests </h1>
+  {% else %}
+  <h1>  My Requests </h1>
+  {% endif %}
   {% if g.user %}
+  <h3>
 	    {% if request.endpoint == 'user_timeline' %}
-	    <div class="navbar sub-navbar-fixed">
-		      	<ul class="nav nav-pills">
-			      {% if g.user.user_id == profile_user.user_id %}
-				<li>This is you!</li>
+			      {% if g.user.user_id == requests.profile_user.user_id %}
+				This is you!
 			      {% elif followed %}
-				<li>You are currently following this user.</li>
-				<li><a class=unfollow href="{{ url_for('unfollow_user', username=profile_user.username) }}">Unfollow user</a>.</li>
+				You are currently following this user.
+				<a class=unfollow href="{{ url_for('unfollow_user', username=requests.profile_user.username) }}">Unfollow user</a>.
 			      {% else %}
 				You are not yet following this user.
-				<li><a class=follow href="{{ url_for('follow_user', username=profile_user.username) }}">Follow user</a>.</li>
+				<a class=follow href="{{ url_for('follow_user', username=requests.profile_user.username) }}">Follow user</a>.</li>
 			      {% endif %}
-			</ul>
-			</div>
+	</h3>
+  </div>
     {% elif request.endpoint == 'timeline' %}
+	<div class="add-new">
+<ul id="myTab" class="nav nav-tabs">
+            <li class="active"><a href="#file" data-toggle="tab">File</a></li>
+            <li><a href="#site" data-toggle="tab">Site</a></li>
+            <li><a href="#torrent" data-toggle="tab">Torrent</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Custom<b class="caret"></b></a>
+              <ul class="dropdown-menu">
+			  {% for type in requests.scripts %}
+				<li><a href="#{{type.name}}" data-toggle=tab>{{type.name}}</a></li>
+				{%endfor%}
+              </ul>
+            </li>
+            <li><a href="#add_script" data-toggle="tab">Add A Script</a></li>
+          </ul>
+          <div id="myTabContent" class="tab-content">
+            <div class="tab-pane fade in active" id="file">
+		<form class="well form-inline" action="/add_file" method=post id="tabforms">
+						<h2>Archive a file:</h2>
+						<input class="span4" type=text name="url" placeholder="URL"></input>
+						<input type=text class="span3" name="description"  placeholder="Small Description"></input>
+						<input type=text class="span2" name="frequency" placeholder="Frequency: 1h, 1d, 1m"></input>
+						<button class="btn" type=submit value="Archive-it!">Archive-it!</button>
+				</form>
+            </div>
+            <div class="tab-pane" id="site">
+		<form class="well form-inline" action="/add_site" method=post id="tabforms">
+						<h2>Archive a site:</h2>
+						<input class="span4" type=text name="url" placeholder="URL"></input>
+						<input type=text class="span3" name="description"  placeholder="Small Description"></input>
+						<input type=text class="span2" name="frequency" placeholder="Frequency: 1h, 1d, 1m"></input>
+						<button class="btn" type=submit value="Archive-it!">Archive-it!</button>
+				</form>
+            </div>
+            <div class="tab-pane" id="torrent">
+		<form class="well form-inline" action="/add_torrent" method=post id="tabforms">
+						<h2>Archive a torrent:</h2>
+						<input class="span4" type=text name="url" placeholder="URL"></input>
+						<input type=text class="span3" name="description"  placeholder="Small Description"></input>
+						<button class="btn" type=submit value="Archive-it!">Archive-it!</button>
+				</form>
+            </div>
 
-      <div class="request-box">
-        <h2>What you think should be added to our archive, {{ g.user.username }}?</h2>
-        <form class="well form-inline" action="{{ url_for('add_request') }}" method=post>
-          <input class="span5" type=text name="url" placeholder="URL">
-	  <div class="btn-group">
-	    <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">Script<span class="caret"></span> </a>
-	    <ul class="dropdown-menu">
-	    <li> File </li>
-	    <li> File </li>
-	    <li> File </li>
-	    </ul>
-	  </div>
-	     <input type=text class="span4" name="description"  placeholder="Small Description">
-	  <div class="btn-group">
-	    <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">Frequency<span class="caret"></span> </a>
-	    <ul class="dropdown-menu">
-	    <li> Script </li>
-	    <li> Script </li>
-	    <li> Script </li>
-	    </ul>
-	  </div>
-          <button class="btn" type=submit value="Archive-it!">Archive-it!</button>
-        </form>
-      </div>
+		  {% for type in requests.scripts %}
+            <div class="tab-pane" id="{{type.name}}">
+		<form class="well form-inline" action="/add_{{type.name}}" method=post id="tabforms">
+						<h2>Use script <em>{{type.name}}:</em></h2>
+						<input class="span4" type=text name="url" placeholder="URL"></input>
+						<input type=text class="span3" name="description"  placeholder="Small Description"></input>
+						{% if type.freq %}
+						<input type=text class="span2" name="frequency" placeholder="Frequency: 1h, 1d, 1m"></input>
+						{% endif %}
+						<button class="btn" type=submit value="Archive-it!">Archive-it!</button>
+				</form>
+            </div>
+		{%endfor%}
+		<div class="tab-pane" id="add_script">
+		<form class="well form-inline" action="/script_add" method=post>
+						<h2>Your new script:</h2>
+						<input type=text class="span2" name="name" placeholder="One_word_name"></input>
+						<input class="span4" type=text name="code" placeholder="Command"></input>
+						<input type=text class="span3" name="description"  placeholder="Small Description"></input>
+						<label class="checkbox">
+								<input type="checkbox" name="repeat">Allow Repeat 
+						</label>
+						<button class="btn" type=submit value="Add Script!">Add-it!</button>
+				</form>
+			</div>
+			</div>
+			</div>
     {% endif %}
   {% endif %}
-  {% for message in requests%}
+  {% if requests.requests %}
   <div class="request-unit">
-      <h2>{{ message.url}}</h2>
-    <p>Submitted by:   <img src="{{ message.email|gravatar(size=48) }}">
-       <strong><a href="{{ url_for('user_timeline', username=message.request_by)
-      }}">{{ message.request_by|get_user}}</a></strong>
-     <span class="pull-right"> Status of request: {{ message.status|get_status}}</span>
+  {% for message in requests.requests%}
+      <h1>{{ message.url}}
+	  {% if message.description %}
+	  <br><small>{{ message.description}}</small>
+	  {% endif %}
+	  </h1>
+    <p><img src="{{ message.email|gravatar(size=48) }}">
+       <strong><a href="{{ url_for('user_timeline', username=message.request_by|get_user) }}">{{ message.request_by|get_user}}</a></strong>
+     <span class="pull-right"> Status: {{ message.status|get_status}}</span>
 
       <small>&mdash; {{ message.queued_at|datetimeformat }}</small>
+	  <div class="hr"><hr></div>
+  {% endfor %}
   </div>
   {% else %}
-    <em>There's no requestso far.</em>
+    <em>There's no request so far.</em>
   </div>
-  {% endfor %}
+	{% endif %}
 {% endblock %}

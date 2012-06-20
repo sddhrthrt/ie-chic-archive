@@ -47,12 +47,12 @@
         </div>
       </div>
     </div>
-	  {% with flashes = get_flashed_messages() %} {% if flashes %} <ul class=flashes> {% for message in flashes %} <li>{{ message }} {% endfor %} </ul> {% endif %} {% endwith %} 
 	  <div class=container>
+	  <div class="pushdown"></div>
+	  {% with flashes = get_flashed_messages() %} {% if flashes %} <div class="alert alert-info"> <ul>{% for message in flashes %} <li>{{ message }} {% endfor %} </ul></div> {% endif %} {% endwith %} 
 	  {% block body %}{% endblock %}
 	  </div>
-	  </div>
-	  <div class="footer" align=center>Archive 'em all! | IE project</div>
+	  <div class="footer" align=center>Archive 'em all! | IE project | <a href="http://github.com/sddhrthrt/ie-chic-archive.git" id="footerlinks"> on Github</a></div>
 {% include 'jsinclude.html' %}
 </body>
 </html>
