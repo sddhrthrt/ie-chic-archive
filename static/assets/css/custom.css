@@ -112,3 +112,7 @@ div.hr {
 	background-image: url("../img/infi.png") no-repeat scroll center;
 	height: 25px;
 }
+#signout-icon{
+	font-size: 80px;
+	size: 40px;
+}

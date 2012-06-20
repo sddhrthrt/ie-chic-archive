@@ -35,8 +35,8 @@
             <ul class="nav">
 	    {% if g.user %}
 		<li class="active"><a href="{{ url_for('public_timeline') }}">Home</a></li>
-		<li><a href="{{ url_for('timeline') }}">My Requests</a> </li>
-		<li><a href="{{ url_for('logout') }}">Sign Out [{{ g.user.username }}]</a></li>
+		<li  ><a href="{{ url_for('timeline') }}">My Requests</a> </li>
+		<li ><a href="{{ url_for('logout') }}"><i class="icon-off icon-white" id="signout-icon"></i>  [{{ g.user.username }}]</a></li>
 	  {% else %}
 		<li><a href="{{ url_for('public_timeline') }}">Home</a></li>
 		<li><a href="{{ url_for('register') }}">Sign Up!</a></li>

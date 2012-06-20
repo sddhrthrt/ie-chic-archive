@@ -220,7 +220,7 @@ def add_script():
 		fname=os.path.normpath(os.path.join(os.path.abspath('scripts'),fname))
 		with open(fname, "w") as f:
 			f.write(str(request.form['code']))
-		flash('New script %s was added!'%request['name'])
+		flash('New script %s was added!'%request.form['name'])
 	else:
 		flash('Script missing name or code itself!')
 	return redirect(url_for('timeline'))
@@ -289,4 +289,4 @@ app.jinja_env.filters['gravatar'] = gravatar_url
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run('0.0.0.0')

@@ -23,7 +23,7 @@
 	    {% if request.endpoint == 'user_timeline' %}
 			      {% if g.user.user_id == requests.profile_user.user_id %}
 				This is you!
-			      {% elif followed %}
+			      {% elif requests.followed %}
 				You are currently following this user.
 				<a class=unfollow href="{{ url_for('unfollow_user', username=requests.profile_user.username) }}">Unfollow user</a>.
 			      {% else %}
@@ -54,11 +54,10 @@
 						<h2>Archive a file:</h2>
 						<input class="span4" type=text name="url" placeholder="URL"></input>
 						<input type=text class="span3" name="description"  placeholder="Small Description"></input>
-						<input type=text class="span2" name="frequency" placeholder="Frequency: 1h, 1d, 1m"></input>
 						<button class="btn" type=submit value="Archive-it!">Archive-it!</button>
 				</form>
             </div>
-            <div class="tab-pane" id="site">
+            <div class="tab-pane fade" id="site">
 		<form class="well form-inline" action="/add_site" method=post id="tabforms">
 						<h2>Archive a site:</h2>
 						<input class="span4" type=text name="url" placeholder="URL"></input>
@@ -67,7 +66,7 @@
 						<button class="btn" type=submit value="Archive-it!">Archive-it!</button>
 				</form>
             </div>
-            <div class="tab-pane" id="torrent">
+            <div class="tab-pane fade" id="torrent">
 		<form class="well form-inline" action="/add_torrent" method=post id="tabforms">
 						<h2>Archive a torrent:</h2>
 						<input class="span4" type=text name="url" placeholder="URL"></input>
@@ -77,7 +76,7 @@
             </div>
 
 		  {% for type in requests.scripts %}
-            <div class="tab-pane" id="{{type.name}}">
+            <div class="tab-pane fade" id="{{type.name}}">
 		<form class="well form-inline" action="/add_{{type.name}}" method=post id="tabforms">
 						<h2>Use script <em>{{type.name}}:</em></h2>
 						<input class="span4" type=text name="url" placeholder="URL"></input>
@@ -89,8 +88,8 @@
 				</form>
             </div>
 		{%endfor%}
-		<div class="tab-pane" id="add_script">
-		<form class="well form-inline" action="/script_add" method=post>
+		<div class="tab-pane fade" id="add_script">
+		<form class="well form-inline" action="/script_add" method=post id="tabforms">
 						<h2>Your new script:</h2>
 						<input type=text class="span2" name="name" placeholder="One_word_name"></input>
 						<input class="span4" type=text name="code" placeholder="Command"></input>
