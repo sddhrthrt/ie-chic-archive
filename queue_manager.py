@@ -118,7 +118,7 @@ class RequestQueue(object):
             if id:
 				id_buffer, frequency = conn.execute(self._get_frequency)
 				if frequency>0:
-					self.append(request_id)					
+					self.append(request_id)
                 conn.execute(self._popleft_del, (id,))
                 return obj_buffer
         return None
@@ -131,7 +131,7 @@ class RequestQueue(object):
                 return None
 
 if __name__=='__main__':
-	q= SqliteQueue('data/testqueue.db') 
+	q= SqliteQueue('data/testqueue.db')
 	q.append("First Task", 1)
 	q.append("Second Task", 0)
 	print get_pending_tasks()
