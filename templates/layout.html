@@ -10,6 +10,7 @@
     <link href="../static/assets/css/bootstrap.css" rel="stylesheet">
     <link href="../static/assets/css/bootstrap-responsive.css" rel="stylesheet">
     <link href="../static/assets/css/custom.css" rel="stylesheet">
+	<link href="../static/assets/css/font-awesome.css" rel="stylesheet">
 
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -36,11 +37,11 @@
 	    {% if g.user %}
 		<li class="active"><a href="{{ url_for('public_timeline') }}">Home</a></li>
 		<li  ><a href="{{ url_for('timeline') }}">My Requests</a> </li>
-		<li ><a href="{{ url_for('logout') }}"><i class="icon-off icon-white" id="signout-icon"></i>  [{{ g.user.username }}]</a></li>
+		<li ><a href="{{ url_for('logout') }}">Sign Off</i>[{{ g.user.username }}]</a></li>
 	  {% else %}
 		<li><a href="{{ url_for('public_timeline') }}">Home</a></li>
 		<li><a href="{{ url_for('register') }}">Sign Up!</a></li>
-		<li><a href="{{ url_for('login') }}">Sign In</a></li>
+		<li><a href="{{ url_for('login') }}"><i class="icon-off" style="font-size: 24px"></i></a></li>
 	  {% endif %}
             </ul>
           </div><!--/.nav-collapse -->
