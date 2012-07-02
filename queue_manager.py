@@ -12,7 +12,6 @@ DATABASE = 'data/archive.db'
 def connect_db():
     """Returns a new connection to the database."""
     return sqlite3.connect(app.config['DATABASE'])
-
 def query_db(query, args=(), one=False):
     """Queries the database and returns a list of dictionaries."""
     cur = g.db.execute(query, args)
@@ -25,7 +24,6 @@ def get_user_id(username):
     rv = g.db.execute('select user_id from user where username = ?',
                        [username]).fetchone()
     return rv[0] if rv else None
-
 
 def format_datetime(timestamp):
     """Format a timestamp for display."""
