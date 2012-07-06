@@ -17,11 +17,11 @@ create table requests (
   request_id integer primary key autoincrement,
   request_by integer not null,
   url string not null,
-  script integer not null,
+  script string not null,
   description string,
-  queued_at	string not null,
-  started_at	string,
-  done_at	string,
+  queued_at	datetime default current_timestamp,
+  started_at	datetime,
+  done_at	datetime,
   frequency	string,
   status integer not null	
 );
@@ -34,9 +34,11 @@ create table scripts (
   script_desc string
 );
 
+drop table if exists queue;
 create table queue (
   id integer primary key autoincrement,
   request_id integer,
   frequency string,
+  queued_at datetime,
   status integer not null
 );

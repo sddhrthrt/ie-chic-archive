@@ -47,8 +47,7 @@ def init_db():
 def query_db(query, args=(), one=False):
     """Queries the database and returns a list of dictionaries."""
     cur = g.db.execute(query, args)
-    rv = [dict((cur.description[idx][0], value)
-               for idx, value in enumerate(row)) for row in cur.fetchall()]
+    rv = [dict((cur.description[idx][0], value) for idx, value in enumerate(row)) for row in cur.fetchall()]
     return (rv[0] if rv else None) if one else rv
 
 
@@ -199,12 +198,19 @@ def add_request(script):
     if 'user_id' not in session:
         abort(401)
     if request.form['url']:
-		if 'frequency' in request.form:
-				g.db.execute('''insert into requests (request_by, url, script, description, frequency, queued_at, status) values (?, ?, ?, ?, ?, ?, ?)''', (session['user_id'], request.form['url'], script, request.form['description'], request.form['frequency'], int(time.time()),0))
-		else:
-				g.db.execute('''insert into requests (request_by, url, script, description, frequency, queued_at, status) values (?, ?, ?, ?, ?, ?, ?)''', (session['user_id'], request.form['url'], script, request.form['description'], 0, int(time.time()),0))
-		g.db.commit()
-		flash('Your request for %s...%s was recorded'%(request.form['url'][:8], request.form['url'][-8:]))
+			while(1):
+					try:
+						if 'frequency' in request.form:
+							g.db.execute('''insert into requests (request_by, url, script, description, frequency, queued_at, status) values (?, ?, ?, ?, ?, ?, ?)''', (session['user_id'], request.form['url'], script, request.form['description'], request.form['frequency'], int(time.time()),0))
+						else:
+							g.db.execute('''insert into requests (request_by, url, script, description, frequency, queued_at, status) values (?, ?, ?, ?, ?, ?, ?)''', (session['user_id'], request.form['url'], script, request.form['description'], 0, int(time.time()),0))
+						g.db.commit()
+						flash('Your request for %s...%s was recorded'%(request.form['url'][:8], request.form['url'][-8:]))
+						break
+					except:
+							print "Add fail - DB busy. Trying again."
+							pass
+
     return redirect(url_for('timeline'))
 
 @app.route('/script_add', methods=['POST'])
@@ -270,7 +276,7 @@ def register():
                 [request.form['username'], request.form['email'],
                  generate_password_hash(request.form['password'])])
             g.db.commit()
-            flash('You were successfully registered and can login now')
+            flash('You were successfully registered and were logged in')
             return redirect(url_for('login'))
     return render_template('register.html', error=error)
 
