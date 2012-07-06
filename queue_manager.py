@@ -133,6 +133,8 @@ class RequestQueue(object):
 								return None
 		def add_unfinished(self):
 				remaining=self.execute('select * from requests where status = ?', ('0',))
+				if not remaining:
+						return
 				existing = self.execute('select request_id from queue')
 				if existing: 
 						existing = [r['request_id'] for r in existing]
@@ -141,9 +143,15 @@ class RequestQueue(object):
 				for request in remaining:
 						if request['request_id'] not in existing:
 								self.append(request['request_id'], request['frequency'], time.time(), request['status'])
+								q.execute('update requests set status = ? where request_id = ?', (1, request['request_id'],))
+								q.execute('update requests  set started_at = ? where request_id=?', (time.time(), request['request_id']))
 		def service_queue(self):
 				q.add_unfinished()
-				req=self.popleft()[0]	
+				req=self.popleft()
+				if(not req):
+						return
+				else:
+						req=req[0]
 				if(req['queued_at'] > time.time()):
 						self.append(req['request_id'], req['frequency'], req['queued_at'], req['status'])	
 						return
@@ -157,13 +165,16 @@ class RequestQueue(object):
 						req['queued_at']=req['queued_at']+convertToSeconds(req['frequency'])
 						self.append(req['request_id'], req['frequency'], req['queued_at'], req['status'])	
 						return
+				else:
+						q.execute('update requests set status = ? where request_id = ?', (2, req['request_id'],))
+						q.execute('update requests set done_at = ? where request_id = ?', (time.time(), req['request_id']) )
 				
 
 if __name__=='__main__':
 		q= RequestQueue('data/archive.db')
 		#q.append(2,'1d', int(time.time()), 0)
-		print q.execute('select * from queue', return_list = True)
-		while(q.execute('select count(*) from queue')[0]>0):
+		#while(q.execute('select count(*) from queue', return_list=True)[0][0]>0):
+		while(1):
 				q.service_queue()
-		print q.execute('select * from queue', return_list = True)
+				sleep(2)
 

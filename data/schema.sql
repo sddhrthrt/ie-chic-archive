@@ -20,7 +20,7 @@ create table requests (
   script string not null,
   description string,
   queued_at	datetime default current_timestamp,
-  started_at	datetime,
+  started_at datetime,
   done_at	datetime,
   frequency	string,
   status integer not null	
