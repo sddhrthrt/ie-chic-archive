@@ -9,11 +9,10 @@ try:
 except ImportError:
 		from dummy_thread import get_ident
 
-def convertToSeconds(frequency):
+def convertToSeconds(frequency):    
 		multiplier = {'s':1, 'm':60, 'h':3600, 'd':86400}
 		no = int(frequency[:-1])
 		return no*multiplier[frequency[-1:]]
-			
 
 class RequestQueue(object): 
 
